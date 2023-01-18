@@ -1,12 +1,17 @@
-import App from './App.vue'
-import { createApp } from 'vue'
-import { registerPlugins } from '@/plugins'
-import store from './store/index'
+import App from "./App.vue";
+import { createApp } from "vue";
+import { registerPlugins } from "@/plugins";
+import store from "./store/index";
+import { initializeApp } from "firebase/app";
+import firebaseConfig from "./data/firebaseConfig";
 
-const app = createApp(App)
+// Initialize Firebase
+initializeApp(firebaseConfig);
 
-registerPlugins(app)
+const app = createApp(App);
 
-app.use(store)
+registerPlugins(app);
 
-app.mount('#app')
+app.use(store);
+
+app.mount("#app");

@@ -49,18 +49,12 @@ const routes = [
         name: "NewAdd",
         component: NewAdd,
       },
-    ],
-  },
-  {
-    path: "/",
-    component: () => import("@/layouts/default/AdView.vue"),
-    children: [
       {
         path: "ad/:id",
         props: true,
         name: "Ad",
         component: Ad,
-      },
+      }
     ],
   },
 ];
