@@ -4,14 +4,24 @@ import { registerPlugins } from "@/plugins";
 import store from "./store/index";
 import { initializeApp } from "firebase/app";
 import firebaseConfig from "./data/firebaseConfig";
+import { onAuthStateChanged, getAuth } from "firebase/auth";
 
 // Initialize Firebase
 initializeApp(firebaseConfig);
 
-const app = createApp(App);
+let app = "";
 
-registerPlugins(app);
+onAuthStateChanged(getAuth(), (user) => {
+  if (!app) {
 
-app.use(store);
+    store.dispatch("authActions", user);
 
-app.mount("#app");
+    app = createApp(App);
+
+    registerPlugins(app);
+
+    app.use(store);
+
+    app.mount("#app");
+  }
+});

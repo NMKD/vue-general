@@ -37,9 +37,9 @@
 export default {
   data() {
     return {
+      valid: false,
       title: '',
       description: '',
-      valid: false,
       promo: false
     }
   },

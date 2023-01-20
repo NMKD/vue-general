@@ -34,11 +34,6 @@
 
 <script>
 export default {
-  data() {
-    return {
-
-    }
-  },
   computed: {
     myAds () {
       return this.$store.getters.myAds

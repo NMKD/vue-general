@@ -1,5 +1,6 @@
 // Composables
 import { createRouter, createWebHistory } from "vue-router";
+import store from "../store";
 import Home from "@/views/Home.vue";
 import Login from "@/views/Auth/Login.vue";
 import Registration from "@/views/Auth/Registration.vue";
@@ -33,28 +34,40 @@ const routes = [
         path: "account",
         name: "Account",
         component: Account,
+        meta: {
+          requiresAuth: true,
+        },
       },
       {
         path: "orders",
         name: "Orders",
         component: Orders,
+        meta: {
+          requiresAuth: true,
+        },
       },
       {
         path: "list",
         name: "List",
         component: List,
+        meta: {
+          requiresAuth: true,
+        },
       },
       {
         path: "new",
         name: "NewAdd",
         component: NewAdd,
+        meta: {
+          requiresAuth: true,
+        },
       },
       {
         path: "ad/:id",
         props: true,
         name: "Ad",
         component: Ad,
-      }
+      },
     ],
   },
 ];
@@ -62,6 +75,18 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    if (store.getters.resUser) {
+      next();
+      return;
+    }
+    next("/login");
+  } else {
+    next();
+  }
 });
 
 export default router;

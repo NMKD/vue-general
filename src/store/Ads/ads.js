@@ -6,7 +6,7 @@ export default {
           title: "First",
           description:
             "Lorem ipsum, dolor sit amet. Assumenda maiores architecto veniam et nisi suscipit quae laborum. Illo excepturi officiis laboriosam?",
-          promo: false,
+          promo: true,
           src: "https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg",
           id: "1",
         },
@@ -30,7 +30,7 @@ export default {
           title: "Four",
           description:
             "Lorem ipsum, dolor sit amet. Assumenda maiores architecto veniam et nisi suscipit quae laborum. Illo excepturi officiis laboriosam?",
-          promo: true,
+          promo: false,
           src: "https://cdn.vuetifyjs.com/images/carousel/bird.jpg",
           id: "4",
         },

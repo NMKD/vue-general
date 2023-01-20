@@ -1,5 +1,5 @@
 <template>
-  <v-container class="fill-height">
+  <v-container fluid>
     <v-row justify="center" align-content="center">
       <v-col cols="12" md="6" lg="6">
         <h1 class="my-10 text-center">Login</h1>
@@ -20,6 +20,9 @@
             Sign In
           </v-btn>
         </v-form>
+        <v-alert class="my-10" v-show="errors" variant="outlined" type="warning" prominent border="top">
+          {{ errors }}
+        </v-alert>
       </v-col>
     </v-row>
   </v-container>
@@ -28,6 +31,7 @@
 <script>
 export default {
   data: () => ({
+    errors: '',
     form: false,
     password: '',
     passwordRules: [
@@ -43,7 +47,7 @@ export default {
   computed: {
     loading() {
       return this.$store.getters.loading
-    }
+    },
   },
   methods: {
     onSubmit() {
@@ -55,7 +59,7 @@ export default {
         })
           .then(() => {
             if (!this.$store.getters.resUser) {
-              return
+              return this.errors = this.$store.getters.error
             } else {
               this.$router.push('/')
             }
@@ -63,5 +67,8 @@ export default {
       }
     },
   },
+  components: {
+    // snakeBars
+  }
 }
 </script>
