@@ -15,8 +15,5 @@ export default {
     DefaultBar,
     DefaultView
   },
-  // mounted() {
-  //   this.$store.dispatch('authActions')
-  // }
 }
 </script>
