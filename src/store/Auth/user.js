@@ -13,7 +13,6 @@ export default {
   },
   mutations: {
     setUser(state, payload) {
-      console.log(payload);
       state.user = payload;
     },
   },
@@ -22,12 +21,9 @@ export default {
       commit("clearError");
       commit("setLoading", true);
       try {
-        const user = await createUserWithEmailAndPassword(
-          getAuth(),
-          email,
-          password
-        );
-        commit("setUser", user.user.uid);
+        const auth = getAuth();
+        await createUserWithEmailAndPassword(auth, email, password);
+        commit("setUser", auth.currentUser.uid);
         commit("setLoading", false);
       } catch (error) {
         commit("setLoading", false);
@@ -37,12 +33,9 @@ export default {
 
     async signIn({ commit }, { email, password }) {
       try {
-        const user = await signInWithEmailAndPassword(
-          getAuth(),
-          email,
-          password
-        );
-        commit("setUser", user.user.uid);
+        const auth = getAuth();
+        await signInWithEmailAndPassword(getAuth(), email, password);
+        commit("setUser", auth.currentUser.uid);
         commit("setLoading", false);
       } catch (error) {
         commit("setLoading", false);
@@ -64,6 +57,7 @@ export default {
     },
 
     authActions({ commit }, payload) {
+      console.log(payload.uid)
       commit("setUser", payload.uid);
     },
 

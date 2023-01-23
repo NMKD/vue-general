@@ -5,15 +5,16 @@ import store from "./store/index";
 import { initializeApp } from "firebase/app";
 import firebaseConfig from "./data/firebaseConfig";
 import { onAuthStateChanged, getAuth } from "firebase/auth";
+import { getDatabase } from "firebase/database";
 
 // Initialize Firebase
-initializeApp(firebaseConfig);
+const db = initializeApp(firebaseConfig);
+getDatabase(db);
 
 let app = "";
 
 onAuthStateChanged(getAuth(), (user) => {
   if (!app) {
-
     store.dispatch("authActions", user);
 
     app = createApp(App);

@@ -15,6 +15,17 @@
         </v-form>
       </v-col>
     </v-row>
+    <v-row justify="center" align-content="center">
+      <v-col cols="12" md="6" lg="6" class="px-0">
+        <v-checkbox
+            v-model="promo"
+            label="promo"
+            color="red"
+            value="promo"
+            hide-details
+          ></v-checkbox>
+      </v-col>
+    </v-row>
     <v-row justify="center">
       <v-col cols="12" md="6" lg="6">
         <v-btn color="blue-grey" prepend-icon="mdi-cloud-upload">

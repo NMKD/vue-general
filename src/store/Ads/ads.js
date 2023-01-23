@@ -1,3 +1,6 @@
+import Ad from "./AdsHelp";
+import { getDatabase, ref, set } from "firebase/database";
+import { getAuth } from "firebase/auth";
 export default {
   state() {
     return {
@@ -43,9 +46,27 @@ export default {
     },
   },
   actions: {
-    createAd({ commit }, payload) {
-      payload.id = "dsdwedwq";
-      commit("createAd", payload);
+    async createAd({ commit, getters }, payload) {
+      commit("clearError");
+      commit("setLoading", true);
+      const ad = new Ad(
+        payload.title,
+        payload.description,
+        getters.user,
+        payload.src,
+        payload.promo
+      );
+
+      try {
+        const db = getDatabase();
+        const auth = getAuth();
+        const userId = auth.currentUser.uid;
+        const adDb = await set(ref(db, '/ads/' + userId), ad)
+        console.log(adDb)
+      } catch (error) {
+        commit("setLoading", false);
+        commit("setError", error.code);
+      }
     },
   },
   getters: {
