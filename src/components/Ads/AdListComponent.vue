@@ -14,8 +14,8 @@
                 {{ ad.description }}
               </v-card-text>
 
-              <v-card-actions >
-                <v-btn variant="text" color="teal-accent-4" :to="'/ad/' + ad.id">
+              <v-card-actions>
+                <v-btn variant="text" color="teal-accent-4" :to="'/ad/' + ad.uid">
                   Learn More
                 </v-btn>
               </v-card-actions>
@@ -35,7 +35,7 @@
 <script>
 export default {
   computed: {
-    myAds () {
+    myAds() {
       return this.$store.getters.myAds
     }
   }

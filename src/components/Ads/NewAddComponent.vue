@@ -8,22 +8,17 @@
             label="Title" placeholder="Enter title for ad" color="primary" variant="underlined" required>
           </v-text-field>
 
-          <v-textarea v-model="description" counter
-            :rules="[v => v.length <= 250 || 'Max 250 characters']" class="mb-2" name="description" type="text"
-            label="Ad description" color="primary" variant="underlined" clearable required>
+          <v-textarea v-model="description" counter :rules="[v => v.length <= 250 || 'Max 250 characters']" class="mb-2"
+            name="description" type="text" label="Ad description" color="primary" variant="underlined" clearable
+            required>
           </v-textarea>
         </v-form>
       </v-col>
     </v-row>
     <v-row justify="center" align-content="center">
       <v-col cols="12" md="6" lg="6" class="px-0">
-        <v-checkbox
-            v-model="promo"
-            label="promo"
-            color="red"
-            value="promo"
-            hide-details
-          ></v-checkbox>
+        <v-checkbox v-model="checked" label="Ad promo?" color="red" @click="checked !== checked"
+          hide-details></v-checkbox>
       </v-col>
     </v-row>
     <v-row justify="center">
@@ -51,7 +46,7 @@ export default {
       valid: false,
       title: '',
       description: '',
-      promo: false
+      checked: false
     }
   },
   methods: {
@@ -61,11 +56,10 @@ export default {
         const ad = {
           title: this.title,
           description: this.description,
-          promo: this.promo,
-          src: 'https://ih1.redbubble.net/image.560117993.5900/raf,750x1000,075,t,black_triblend.u1.jpg'
+          promo: this.checked,
+          src: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg'
         }
-
-        this.$store.dispatch('createAd', ad)
+        this.$store.dispatch('createAd', ad).then(() => this.$router.push('/list'))
       }
     },
   }

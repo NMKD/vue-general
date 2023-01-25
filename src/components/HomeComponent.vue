@@ -1,10 +1,10 @@
 <template>
-  <v-container fluid>
+  <v-container v-if="!loading" fluid>
     <v-row>
       <v-col cols="12">
         <v-carousel hide-delimiters show-arrows="hover" progress="primary" height="400">
 
-          <v-carousel-item cover v-for="slide in promoAds" :key="slide.id" :src="slide.src">
+          <v-carousel-item cover v-for="slide in promoAds" :key="slide.uid" :src="slide.src">
           </v-carousel-item>
 
         </v-carousel>
@@ -12,7 +12,7 @@
       <v-col cols="12">
         <h1 class="my-10 text-center">Home</h1>
         <v-row justify="center" align-content="center">
-          <v-col cols="12" md="6" lg="4" v-for="slide in ads" :key="slide.id">
+          <v-col cols="12" md="6" lg="4" v-for="slide in ads" :key="slide.uid">
             <v-card>
               <v-img :src="slide.src" height="200px" cover></v-img>
 
@@ -34,7 +34,7 @@
 
                 <v-spacer></v-spacer>
 
-                <v-btn :to="'/ad/' + slide.id" color="info" variant="tonal">
+                <v-btn :to="'/ad/' + slide.uid" color="info" variant="tonal">
                   Open
                 </v-btn>
                 <v-btn target="_blank" :to="'/orders'" color="success" variant="flat">
@@ -49,21 +49,26 @@
       </v-col>
     </v-row>
   </v-container>
+  <v-container v-else>
+    <v-row>
+      <v-col cols="12" class="d-flex align-center justify-center pt-10">
+        <v-progress-circular indeterminate :size="70" :width="7" color="purple"></v-progress-circular>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
 export default {
-  data() {
-    return {
-
-    }
-  },
   computed: {
     promoAds() {
       return this.$store.getters.promoAds
     },
     ads() {
       return this.$store.getters.ads
+    },
+    loading() {
+      return this.$store.getters.loading
     }
   }
 }

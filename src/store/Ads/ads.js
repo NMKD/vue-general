@@ -1,43 +1,17 @@
 import Ad from "./AdsHelp";
-import { getDatabase, ref, set } from "firebase/database";
+import { ref, update, child, get } from "firebase/database";
 import { getAuth } from "firebase/auth";
+import fireStoreDb from "../firebaseConfig";
+
+const getCurrentUser = () => {
+  const auth = getAuth();
+  return auth.currentUser.uid;
+};
+
 export default {
   state() {
     return {
-      ads: [
-        {
-          title: "First",
-          description:
-            "Lorem ipsum, dolor sit amet. Assumenda maiores architecto veniam et nisi suscipit quae laborum. Illo excepturi officiis laboriosam?",
-          promo: true,
-          src: "https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg",
-          id: "1",
-        },
-        {
-          title: "Second",
-          description:
-            "Lorem ipsum, dolor sit amet. Assumenda maiores architecto veniam et nisi suscipit quae laborum. Illo excepturi officiis laboriosam?",
-          promo: true,
-          src: "https://cdn.vuetifyjs.com/images/carousel/sky.jpg",
-          id: "2",
-        },
-        {
-          title: "Third",
-          description:
-            "Lorem ipsum, dolor sit amet. Assumenda maiores architecto veniam et nisi suscipit quae laborum. Illo excepturi officiis laboriosam?",
-          promo: true,
-          src: "https://cdn.vuetifyjs.com/images/carousel/bird.jpg",
-          id: "3",
-        },
-        {
-          title: "Four",
-          description:
-            "Lorem ipsum, dolor sit amet. Assumenda maiores architecto veniam et nisi suscipit quae laborum. Illo excepturi officiis laboriosam?",
-          promo: false,
-          src: "https://cdn.vuetifyjs.com/images/carousel/bird.jpg",
-          id: "4",
-        },
-      ],
+      ads: [],
     };
   },
   mutations: {
@@ -49,23 +23,47 @@ export default {
     async createAd({ commit, getters }, payload) {
       commit("clearError");
       commit("setLoading", true);
+      const db = fireStoreDb();
+      const userId = getCurrentUser();
       const ad = new Ad(
         payload.title,
         payload.description,
-        getters.user,
+        getters.resUser,
         payload.src,
         payload.promo
       );
 
       try {
-        const db = getDatabase();
-        const auth = getAuth();
-        const userId = auth.currentUser.uid;
-        const adDb = await set(ref(db, '/ads/' + userId), ad)
-        console.log(adDb)
+        if (userId) {
+          // const newPostKey = push(child(ref(db), "posts")).key;
+          const updates = {};
+          updates["/ads-posts/" + userId] = ad;
+          commit("createAd", ad);
+          await update(ref(db), updates);
+          commit("setLoading", false);
+        }
       } catch (error) {
         commit("setLoading", false);
         commit("setError", error.code);
+      }
+    },
+
+    async fetchAds({ commit }) {
+      commit("clearError");
+      commit("setLoading", true);
+      try {
+        const dbRef = ref(fireStoreDb());
+        const userId = getCurrentUser();
+        const ads = await get(child(dbRef, `ads-posts/${userId}`));
+        if (ads) {
+          commit("setLoading", false);
+          commit("createAd", ads.val());
+        } else {
+          console.log("No data available");
+        }
+      } catch (error) {
+        commit("setError", error.message);
+        throw error;
       }
     },
   },
@@ -81,7 +79,7 @@ export default {
     },
     adById(state) {
       return (adId) => {
-        return state.ads.find((ad) => ad.id === adId);
+        return state.ads.find((ad) => ad.uid === adId);
       };
     },
   },

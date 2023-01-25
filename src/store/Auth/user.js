@@ -32,6 +32,8 @@ export default {
     },
 
     async signIn({ commit }, { email, password }) {
+      commit("clearError");
+      commit("setLoading", true);
       try {
         const auth = getAuth();
         await signInWithEmailAndPassword(getAuth(), email, password);
@@ -57,7 +59,6 @@ export default {
     },
 
     authActions({ commit }, payload) {
-      console.log(payload.uid)
       commit("setUser", payload.uid);
     },
 
