@@ -28,6 +28,7 @@ export default {
       } catch (error) {
         commit("setLoading", false);
         commit("setError", error.code);
+        throw error;
       }
     },
 

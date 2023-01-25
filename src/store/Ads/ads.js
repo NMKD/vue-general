@@ -45,6 +45,7 @@ export default {
       } catch (error) {
         commit("setLoading", false);
         commit("setError", error.code);
+        throw error;
       }
     },
 
@@ -62,7 +63,8 @@ export default {
           console.log("No data available");
         }
       } catch (error) {
-        commit("setError", error.message);
+        commit("setLoading", false);
+        commit("setError", error.code);
         throw error;
       }
     },
