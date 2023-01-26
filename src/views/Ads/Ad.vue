@@ -1,7 +1,14 @@
 <template>
-  <ad-component />
+  <ad-component :id="id" />
 </template>
 
-<script setup>
+<script>
 import AdComponent from '@/components/Ads/AdComponent.vue';
+
+export default {
+  props: ['id'],
+  components: {
+    AdComponent
+  },
+}
 </script>

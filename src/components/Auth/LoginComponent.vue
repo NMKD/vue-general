@@ -67,8 +67,5 @@ export default {
       }
     },
   },
-  components: {
-    // snakeBars
-  }
 }
 </script>

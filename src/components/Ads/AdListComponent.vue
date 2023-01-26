@@ -3,7 +3,7 @@
     <v-row justify="center" align-content="center">
       <v-col cols="12" md="6" lg="6">
         <h1 class="my-10 text-center">Ad List</h1>
-        <v-card class="mb-8" v-for="ad in myAds" :key="ad.id" elevation="4">
+        <v-card class="mb-8" v-for="ad in myAds" :key="ad.uid" elevation="4">
           <div class="d-flex flex-no-wrap justify-space-between">
             <div>
               <v-card-title class="text-h5">

@@ -13,6 +13,10 @@
             required>
           </v-textarea>
         </v-form>
+
+        <v-file-input accept="image/png, image/jpeg" label="File input" @change="onChangeFile"></v-file-input>
+        <img v-if="src" :src='src' alt="cars" height="100" />
+
       </v-col>
     </v-row>
     <v-row justify="center" align-content="center">
@@ -23,17 +27,9 @@
     </v-row>
     <v-row justify="center">
       <v-col cols="12" md="6" lg="6">
-        <v-btn color="blue-grey" prepend-icon="mdi-cloud-upload">
-          Upload
-        </v-btn>
-        <v-btn color="orange" class="mx-3" :disabled="!valid" @click="createAd">
+        <v-btn color="orange" :disabled="!valid || !image" @click="createAd" :loading="loading">
           Create
         </v-btn>
-      </v-col>
-    </v-row>
-    <v-row justify="center">
-      <v-col cols="12" md="6" lg="6">
-        <img src="https://cdn.vuetifyjs.com/images/carousel/sky.jpg" alt="" height="100">
       </v-col>
     </v-row>
   </v-container>
@@ -46,22 +42,38 @@ export default {
       valid: false,
       title: '',
       description: '',
-      checked: false
+      checked: false,
+      image: null,
+      src: '',
+    }
+  },
+  computed: {
+    loading() {
+      return this.$store.getters.loading
     }
   },
   methods: {
     createAd() {
-      if (!this.valid) return
+      if (!this.valid && !this.src) return
       if (this.$refs.form.validate()) {
         const ad = {
           title: this.title,
           description: this.description,
           promo: this.checked,
-          src: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg'
+          src: this.image
         }
         this.$store.dispatch('createAd', ad).then(() => this.$router.push('/list'))
       }
     },
+    onChangeFile(event) {
+      const file = event.target.files[0]
+      const reader = new FileReader()
+      reader.onload = () => {
+        this.src = reader.result
+      }
+      reader.readAsDataURL(file)
+      this.image = file
+    }
   }
 }
 </script>
