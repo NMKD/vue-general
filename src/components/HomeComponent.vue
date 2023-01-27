@@ -12,12 +12,12 @@
       <v-col cols="12">
         <h1 class="my-10 text-center">Home</h1>
         <v-row justify="center" align-content="center">
-          <v-col cols="12" md="6" lg="4" v-for="slide in ads" :key="slide.uid">
+          <v-col cols="12" md="6" lg="4" v-for="ad in ads" :key="ad.uid">
             <v-card>
-              <v-img :src="slide.src" height="200px" cover></v-img>
+              <v-img :src="ad.src" height="200px" cover></v-img>
 
               <v-card-title>
-                {{ slide.title }}
+                {{ ad.title }}
               </v-card-title>
 
               <v-card-subtitle>
@@ -25,7 +25,7 @@
               </v-card-subtitle>
 
               <v-card-text>
-                {{ slide.description }}
+                {{ ad.description }}
               </v-card-text>
               <v-divider></v-divider>
               <v-card-actions>
@@ -34,12 +34,10 @@
 
                 <v-spacer></v-spacer>
 
-                <v-btn :to="'/ad/' + slide.uid" color="info" variant="tonal">
+                <v-btn :to="'/ad/' + ad.uid" color="info" variant="tonal">
                   Open
                 </v-btn>
-                <v-btn target="_blank" :to="'/orders'" color="success" variant="flat">
-                  Buy
-                </v-btn>
+                <buy-modal :ad="ad"></buy-modal>
 
               </v-card-actions>
 
@@ -59,7 +57,11 @@
 </template>
 
 <script>
+import BuyModal from '../components/Shared/BuyModal.vue';
 export default {
+  components: {
+    BuyModal
+  },
   computed: {
     promoAds() {
       return this.$store.getters.promoAds

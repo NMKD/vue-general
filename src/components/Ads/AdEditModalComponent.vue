@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" persistent>
+  <v-dialog style="width: 50%" v-model="dialog" persistent>
     <template v-slot:activator="{ props }">
       <v-btn color="primary" v-bind="props">
         Edit
@@ -11,12 +11,13 @@
       </v-card-title>
       <v-divider></v-divider>
       <v-card-text>
-        <v-text-field v-model="title" :rules="[v => !!v || 'Title is required']" class="mb-2" name="title" type="text"
-          label="Title" placeholder="Enter title for ad" color="primary" variant="underlined" required>
+        <v-text-field v-model="editTitle" :rules="[v => !!v || 'Title is required']" class="mb-2" name="title"
+          type="text" label="Title" placeholder="Enter title for ad" color="primary" variant="underlined" required>
         </v-text-field>
 
-        <v-textarea v-model="description" counter :rules="[v => v.length <= 250 || 'Max 250 characters']" class="mb-2"
-          name="description" type="text" label="Ad description" color="primary" variant="underlined" clearable required>
+        <v-textarea v-model="editDescription" counter :rules="[v => v.length <= 250 || 'Max 250 characters']"
+          class="mb-2" name="description" type="text" label="Ad description" color="primary" variant="underlined"
+          clearable required>
         </v-textarea>
 
         <p class="my-10 text-red-accent-2">
@@ -43,9 +44,10 @@ export default {
   data() {
     return {
       dialog: false,
-      title: this.ad.title,
-      description: this.ad.description,
-      errors: ''
+      editTitle: this.ad.title,
+      editDescription: this.ad.description,
+      errors: '',
+      objAd: this.ad
     }
   },
   computed: {
@@ -59,11 +61,9 @@ export default {
         await this.$store.dispatch('setError', 'Please edit or return the old values')
         this.errors = this.$store.getters.error
       } else {
-        await this.$store.dispatch('updateAd', {
-          title: this.title,
-          description: this.description,
-          uid: this.ad.uid
-        })
+        this.objAd.title = this.editTitle
+        this.objAd.description = this.editDescription
+        await this.$store.dispatch('updateAd', this.objAd)
         this.dialog = false
       }
     }

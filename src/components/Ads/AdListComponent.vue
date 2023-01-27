@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container v-if="!loading" fluid>
     <v-row justify="center" align-content="center">
       <v-col cols="12" md="6" lg="6">
         <h1 class="my-10 text-center">Ad List</h1>
@@ -30,6 +30,13 @@
       </v-col>
     </v-row>
   </v-container>
+  <v-container v-else>
+    <v-row>
+      <v-col cols="12" class="d-flex align-center justify-center pt-10">
+        <v-progress-circular indeterminate :size="70" :width="7" color="purple"></v-progress-circular>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -37,6 +44,9 @@ export default {
   computed: {
     myAds() {
       return this.$store.getters.myAds
+    },
+    loading() {
+      return this.$store.getters.loading
     }
   }
 }

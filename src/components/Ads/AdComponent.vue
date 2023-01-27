@@ -22,16 +22,14 @@
 
           <div class="px-5 py-5 d-flex align-center justify-space-between">
 
-            <ad-edit-modal :ad="ad"></ad-edit-modal>
+            <ad-edit-modal v-if="isOwner" :ad="ad"></ad-edit-modal>
 
             <v-card-actions class="px-0">
               <v-btn :to="'/'" color="primary" variant="text">
                 Home
               </v-btn>
 
-              <v-btn target="_blank" :to="'/orders'" color="success" variant="flat">
-                Buy
-              </v-btn>
+              <buy-modal :ad="ad"></buy-modal>
             </v-card-actions>
           </div>
 
@@ -50,10 +48,12 @@
 
 <script>
 import AdEditModal from './AdEditModalComponent.vue'
+import BuyModal from '@/components/Shared/BuyModal.vue';
 export default {
   props: ['id'],
   components: {
-    AdEditModal
+    AdEditModal,
+    BuyModal
   },
   computed: {
     ad() {
@@ -62,7 +62,10 @@ export default {
     },
     loading() {
       return this.$store.getters.loading
+    },
+    isOwner() {
+      return this.ad.uid === this.$store.getters.resUser
     }
-  }
+  },
 }
 </script>

@@ -13,7 +13,7 @@ export default {
   },
   mutations: {
     setUser(state, payload) {
-      state.user = payload;
+      state.user = payload.uid;
     },
   },
   actions: {
@@ -23,7 +23,7 @@ export default {
       try {
         const auth = getAuth();
         await createUserWithEmailAndPassword(auth, email, password);
-        commit("setUser", auth.currentUser.uid);
+        commit("setUser", auth.currentUser);
         commit("setLoading", false);
       } catch (error) {
         commit("setLoading", false);
@@ -38,7 +38,7 @@ export default {
       try {
         const auth = getAuth();
         await signInWithEmailAndPassword(getAuth(), email, password);
-        commit("setUser", auth.currentUser.uid);
+        commit("setUser", auth.currentUser);
         commit("setLoading", false);
       } catch (error) {
         commit("setLoading", false);
@@ -60,7 +60,7 @@ export default {
     },
 
     authActions({ commit }, payload) {
-      commit("setUser", payload.uid);
+      commit("setUser", payload);
     },
 
     logout({ commit }) {

@@ -27,9 +27,13 @@ export default {
     loadAds(state, payload) {
       state.ads = payload;
     },
+    updateAd(state, payload) {
+      const i = state.ads.indexOf((i) => i === payload.key);
+      state.ads[i] = payload;
+    },
   },
   actions: {
-    async createAd({ commit, getters }, payload) {
+    async createAd({ commit }, payload) {
       commit("clearError");
       commit("setLoading", true);
 
@@ -40,7 +44,7 @@ export default {
         const db = fireStoreDb();
         const userId = getCurrentUser();
         const newPostKey = push(child(ref(db), "posts")).key;
-        const uid = `${getters.resUser}${newPostKey}`;
+        const key = `${userId}${newPostKey}`;
         if (userId) {
           // upload image in store firebase
           const storage = getStorage();
@@ -57,7 +61,8 @@ export default {
           const ad = new Ad(
             payload.title,
             payload.description,
-            uid,
+            userId,
+            key,
             urlSrc,
             payload.promo
           );
@@ -84,14 +89,51 @@ export default {
         const fbDb = await get(child(dbRef, `ads-posts`));
         const ads = fbDb.val();
         if (ads) {
-          commit("setLoading", false);
           const ad = Object.keys(ads).map((key) => {
             return ads[key];
           });
+          commit("setLoading", false);
           commit("loadAds", ad);
         } else {
           commit("setLoading", false);
           console.log("No data available");
+        }
+      } catch (error) {
+        commit("setLoading", false);
+        commit("setError", error.code);
+        throw error;
+      }
+    },
+
+    async updateAd({ commit }, payload) {
+      commit("clearError");
+      commit("setLoading", true);
+
+      const ad = new Ad(
+        payload.title,
+        payload.description,
+        payload.uid,
+        payload.key,
+        payload.src,
+        payload.promo
+      );
+
+      try {
+        const db = fireStoreDb();
+        const userId = getCurrentUser();
+
+        if (userId) {
+          const updates = {};
+          updates["/ads-posts/" + ad.key] = ad;
+          await update(ref(db), updates);
+          commit("updateAd", updates);
+          commit("setLoading", false);
+        } else {
+          commit("setLoading", false);
+          commit(
+            "setError",
+            "Something went wrong, check all the fields of the form. Contact your administrator, error in the update Ad function"
+          );
         }
       } catch (error) {
         commit("setLoading", false);
@@ -107,8 +149,8 @@ export default {
     promoAds(state) {
       return state.ads.filter((ad) => ad.promo);
     },
-    myAds(state) {
-      return state.ads;
+    myAds(state, getters) {
+      return state.ads.filter((ad) => ad.uid === getters.resUser);
     },
     adById(state) {
       return (id) => {
