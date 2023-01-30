@@ -56,7 +56,7 @@ export default {
   methods: {
     logout() {
       return this.$store.dispatch('logout')
-      .then(() => this.$router.push('/'))
+        .then(() => this.$router.push('/'))
     },
     isAuthLinks() {
       if (this.isUserSingIn) {
@@ -84,12 +84,6 @@ export default {
             value: 'list',
             icon: 'mdi-format-list-checkbox',
             url: '/list'
-          },
-          {
-            title: 'Account',
-            value: 'account',
-            icon: 'mdi-account',
-            url: '/account'
           },
         ]
       } else {

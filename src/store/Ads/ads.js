@@ -1,18 +1,14 @@
 import Ad from "./AdsHelp";
 import { ref, update, child, get, push } from "firebase/database";
-import { getAuth } from "firebase/auth";
 import fireStoreDb from "../firebaseConfig";
+import getCurrentUser from "../Auth/currentUser";
+
 import {
   uploadBytes,
   getStorage,
   ref as storageRef,
   getDownloadURL,
 } from "firebase/storage";
-
-const getCurrentUser = () => {
-  const auth = getAuth();
-  return auth.currentUser.uid;
-};
 
 export default {
   state() {
@@ -92,6 +88,7 @@ export default {
           const ad = Object.keys(ads).map((key) => {
             return ads[key];
           });
+          console.log(ad);
           commit("setLoading", false);
           commit("loadAds", ad);
         } else {
@@ -149,12 +146,12 @@ export default {
     promoAds(state) {
       return state.ads.filter((ad) => ad.promo);
     },
-    myAds(state, getters) {
-      return state.ads.filter((ad) => ad.uid === getters.resUser);
+    myAds(state) {
+      return state.ads.filter((ad) => ad.uid === getCurrentUser());
     },
     adById(state) {
       return (id) => {
-        return state.ads.find((ad) => ad.uid === id);
+        return state.ads.find((ad) => ad.key === id);
       };
     },
   },

@@ -4,7 +4,6 @@ import store from "../store";
 import Home from "@/views/Home.vue";
 import Login from "@/views/Auth/Login.vue";
 import Registration from "@/views/Auth/Registration.vue";
-import Account from "@/views/Users/Account.vue";
 import Orders from "@/views/Users/Orders.vue";
 import List from "@/views/Ads/List.vue";
 import NewAdd from "@/views/Ads/NewAdd.vue";
@@ -29,14 +28,6 @@ const routes = [
         path: "registration",
         name: "Registration",
         component: Registration,
-      },
-      {
-        path: "account",
-        name: "Account",
-        component: Account,
-        meta: {
-          requiresAuth: true,
-        },
       },
       {
         path: "orders",
@@ -67,6 +58,9 @@ const routes = [
         props: true,
         name: "Ad",
         component: Ad,
+        meta: {
+          requiresAuth: true,
+        },
       },
     ],
   },

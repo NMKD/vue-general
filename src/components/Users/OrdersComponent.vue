@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container v-if="!loading" fluid>
     <h1 class="text-center my-10">Orders</h1>
     <v-row justify="center" align-content="center">
 
@@ -18,29 +18,25 @@
 
           <v-list lines="10" select-strategy="multiple">
             <v-list-subheader>Today Date</v-list-subheader>
-
-            <v-list-item class="my-3" v-for="order in orders" :key="order.id" :value="order.name">
-              <template v-slot:prepend="{ isActive }">
-
-                <v-list-item-action start>
-                  <v-checkbox-btn color="success" :model-value="isActive"></v-checkbox-btn>
-                </v-list-item-action>
-              </template>
+            <v-list-item class="my-3" v-for="order in orders" :key="order.key" :value="order.name">
 
               <div class="d-flex align-content-center justify-space-between">
                 <div>
-                  <v-list-item-title>{{ order.name }}</v-list-item-title>
-                  <v-list-item-subtitle>
-                    {{ order.phone }}
-                  </v-list-item-subtitle>
+                  <v-checkbox v-model="order.done" :label="`${order.name}: ${order.phone}`" color="orange-darken-3"
+                    hide-details @click="markDownOrders(order.key)"></v-checkbox>
                 </div>
-                <v-btn :to="'/ad/' + order.id" variant="text" color="primary">OPEN</v-btn>
+                <v-btn :to="'/ad/' + order.key" variant="text" color="primary">OPEN</v-btn>
               </div>
-
             </v-list-item>
-
           </v-list>
         </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
+  <v-container v-else>
+    <v-row>
+      <v-col cols="12" class="d-flex align-center justify-center pt-10">
+        <v-progress-circular indeterminate :size="70" :width="7" color="purple"></v-progress-circular>
       </v-col>
     </v-row>
   </v-container>
@@ -48,26 +44,23 @@
 
 <script>
 export default {
-  data() {
-    return {
-      isActive: false,
-      orders: [
-        {
-          id: 'sa6',
-          name: 'Kris',
-          phone: '8-923-232-21',
-          adId: '123',
-          done: false
-        },
-        {
-          id: 'sae6',
-          name: 'Lara',
-          phone: '8-923-232-21',
-          adId: '12a3',
-          done: false
-        }
-      ]
-    }
+  computed: {
+    loading() {
+      return this.$store.getters.loading
+    },
+    orders() {
+      return this.$store.getters.getOrders
+    },
+  },
+  methods: {
+    async markDownOrders(order) {
+      try {
+        await this.$store.dispatch('markOrders', this.orders.find(o => o.key === order))
+      } catch (error) {
+        console.log(error)
+      }
+
+    },
   }
 }
 </script>

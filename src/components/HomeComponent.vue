@@ -12,7 +12,7 @@
       <v-col cols="12">
         <h1 class="my-10 text-center">Home</h1>
         <v-row justify="center" align-content="center">
-          <v-col cols="12" md="6" lg="4" v-for="ad in ads" :key="ad.uid">
+          <v-col cols="12" md="6" lg="4" v-for="ad in ads" :key="ad.key">
             <v-card>
               <v-img :src="ad.src" height="200px" cover></v-img>
 
@@ -34,7 +34,7 @@
 
                 <v-spacer></v-spacer>
 
-                <v-btn :to="'/ad/' + ad.uid" color="info" variant="tonal">
+                <v-btn :to="'/ad/' + ad.key" color="info" variant="tonal">
                   Open
                 </v-btn>
                 <buy-modal :ad="ad"></buy-modal>

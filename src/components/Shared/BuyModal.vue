@@ -49,7 +49,8 @@ export default {
       errors: '',
       name: '',
       phone: '',
-      loading: false
+      loading: false,
+      done: false
     }
   },
   methods: {
@@ -62,8 +63,9 @@ export default {
         await this.$store.dispatch('createOrders', {
           name: this.name,
           phone: this.phone,
-          adkey: this.ad.key,
-          uid: this.ad.uid
+          key: this.ad.key,
+          uid: this.ad.uid,
+          done: this.done
         })
         this.name = ''
         this.phone = ''

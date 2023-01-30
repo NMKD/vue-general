@@ -10,6 +10,7 @@ onAuthStateChanged(getAuth(), (user) => {
   if (!app) {
     store.dispatch("authActions", user);
     store.dispatch("fetchAds");
+    store.dispatch("fetchOrders");
     app = createApp(App);
     registerPlugins(app);
     app.use(store);

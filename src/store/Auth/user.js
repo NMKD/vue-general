@@ -13,7 +13,8 @@ export default {
   },
   mutations: {
     setUser(state, payload) {
-      state.user = payload.uid;
+      console.log(payload);
+      state.user = payload;
     },
   },
   actions: {
@@ -63,8 +64,8 @@ export default {
       commit("setUser", payload);
     },
 
-    logout({ commit }) {
-      signOut(getAuth());
+    async logout({ commit }) {
+      await signOut(getAuth());
       commit("setUser", null);
     },
   },
